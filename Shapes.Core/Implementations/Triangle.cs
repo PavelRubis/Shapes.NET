@@ -76,11 +76,17 @@ namespace Shapes.Core.Implementations
 
         public static Triangle<T> CreateWithSides(T a, T b, T c)
         {
-            if (a + b <= c || a + c <= b || b + c <= a)
+            T[] sides = [a, b, c];
+            if (sides.All(side => T.IsPositive(side) && T.IsRealNumber(side) && !T.IsPositiveInfinity(side)) && Triangle<T>.SidesFitTriangleEquation(a, b, c))
             {
-                throw new ArgumentOutOfRangeException("The triangle with sides " + nameof(a) + ", " + nameof(b) + ", " + nameof(c) + " is impossible.");
+                return new Triangle<T>(a, b, c);
             }
-            return new Triangle<T>(a, b, c);
+            throw new ArgumentOutOfRangeException("The triangle with sides " + a + ", " + b + ", " + c + " is impossible.");
+        }
+
+        private static bool SidesFitTriangleEquation(T a, T b, T c)
+        {
+            return a + b > c && a + c > b && b + c > a;
         }
     }
 }

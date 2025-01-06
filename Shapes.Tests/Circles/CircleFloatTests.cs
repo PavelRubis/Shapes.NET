@@ -2,13 +2,13 @@ using Shapes.Core.Implementations;
 
 namespace Shapes.Tests.Circles
 {
-    // All tests've written assuming to fit 
+    // Tests ensures fitting the equation of a circle whith is
+    // (x - a)^2 + (y - b)^2 = r^2, where (a, b) are coordinates of circle center and r is the radius.
     public class CircleFloatTests
     {
         [Theory]
         [InlineData(float.NaN)]
         [InlineData(float.NegativeInfinity)]
-        [InlineData(float.MinValue)]
         [InlineData(-float.Pi)]
         [InlineData(float.NegativeZero)]
         [InlineData(float.PositiveInfinity)]

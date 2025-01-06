@@ -39,7 +39,7 @@ namespace Shapes.Core.Implementations
             {
                 return new Circle<T>(radius);
             }
-            throw new ArgumentOutOfRangeException(nameof(radius));
+            throw new ArgumentOutOfRangeException("The circle with radius" + radius + " is impossible.");
         }
     }
 }
