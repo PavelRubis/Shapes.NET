@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 
 namespace Shapes.Tests.Triangles
 {
+    // Tests ensures fitting the triangle existance conditions:
+    // a + b > c and a + c > b and b + c > a, where a, b, c are sides of triangle.
     public class TriangleDoubleTests
     {
         [Theory]
         [InlineData(1d, 1d, 5d)]
         [InlineData(3d, 4d, -5d)]
+        [InlineData(3d, 4d, double.NaN)]
+        [InlineData(3d, 4d, double.NegativeInfinity)]
+        [InlineData(3d, 4d, -double.Pi)]
+        [InlineData(3d, 4d, 0d)]
+        [InlineData(3d, 4d, double.PositiveInfinity)]
         public void TryCreateWithInvalidSides(double a, double b, double c)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
@@ -36,6 +43,14 @@ namespace Shapes.Tests.Triangles
             var triangle = Triangle<double>.CreateWithSides(a, b, c);
             Assert.Equal(30d * double.Sqrt(2d), triangle.Area);
             Assert.Equal(false, triangle.IsRightAngled);
+        }
+
+        [Theory]
+        [InlineData(double.MaxValue - 2d, double.MaxValue - 1d, double.MaxValue)]
+        public void CreateWithInfiniteArea(double a, double b, double c)
+        {
+            var triangle = Triangle<double>.CreateWithSides(a, b, c);
+            Assert.Equal(double.PositiveInfinity, triangle.Area);
         }
     }
 }

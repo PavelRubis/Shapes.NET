@@ -21,19 +21,19 @@ namespace Shapes.Tests.Circles
         }
 
         [Theory]
+        [InlineData(0d)]
+        [InlineData(double.Pi)]
+        public void Create(double radius)
+        {
+            Assert.Equal(double.Pi * radius * radius, Circle<double>.CreateWithRadius(radius).Area);
+        }
+
+        [Theory]
         [InlineData(double.MaxValue)]
         public void CreateWithInfiniteArea(double radius)
         {
             var circle = Circle<double>.CreateWithRadius(radius);
             Assert.Equal(double.PositiveInfinity, circle.Area);
-        }
-
-        [Theory]
-        [InlineData(0d)]
-        [InlineData(double.Pi)]
-        public void CalculateAndVerifyArea(double radius)
-        {
-            Assert.Equal(Math.PI * radius * radius, Circle<double>.CreateWithRadius(radius).Area);
         }
     }
 }

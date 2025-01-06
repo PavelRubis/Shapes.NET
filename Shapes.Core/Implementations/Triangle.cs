@@ -77,7 +77,7 @@ namespace Shapes.Core.Implementations
         public static Triangle<T> CreateWithSides(T a, T b, T c)
         {
             T[] sides = [a, b, c];
-            if (sides.All(side => T.IsPositive(side) && T.IsRealNumber(side) && !T.IsPositiveInfinity(side)) && Triangle<T>.SidesFitTriangleEquation(a, b, c))
+            if (sides.All(side => side > T.Zero && T.IsRealNumber(side) && !T.IsPositiveInfinity(side)) && Triangle<T>.SidesFitTriangleEquation(a, b, c))
             {
                 return new Triangle<T>(a, b, c);
             }
