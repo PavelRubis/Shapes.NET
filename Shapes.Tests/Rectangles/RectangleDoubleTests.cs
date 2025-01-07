@@ -14,6 +14,7 @@ namespace Shapes.Tests.Rectangles
         [InlineData(5d, double.NegativeInfinity)]
         [InlineData(5d, -double.Pi)]
         [InlineData(5d, 0d)]
+        [InlineData(5d, double.MaxValue)]
         [InlineData(5d, double.PositiveInfinity)]
         public void TryCreateWithInvalidSides(double a, double b)
         {
@@ -29,14 +30,6 @@ namespace Shapes.Tests.Rectangles
         public void Create(double a, double b)
         {
             Assert.Equal(a * b, Rectangle<double>.CreateWithSides(a, b).Area);
-        }
-
-        [Theory]
-        [InlineData(5d, double.MaxValue)]
-        public void CreateWithInfiniteArea(double a, double b)
-        {
-            var rectangle = Rectangle<double>.CreateWithSides(a, b);
-            Assert.Equal(double.PositiveInfinity, rectangle.Area);
         }
     }
 }

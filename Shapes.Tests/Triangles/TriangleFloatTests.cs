@@ -44,13 +44,5 @@ namespace Shapes.Tests.Triangles
             Assert.Equal(false, triangle.IsRightAngled);
             Assert.Equal(30f * float.Sqrt(2f), triangle.Area);
         }
-
-        [Theory]
-        [InlineData(float.MaxValue - 2f, float.MaxValue - 1f, float.MaxValue)]
-        public void CreateWithInfiniteArea(float a, float b, float c)
-        {
-            var triangle = Triangle<float>.CreateWithSides(a, b, c);
-            Assert.Equal(float.PositiveInfinity, triangle.Area);
-        }
     }
 }

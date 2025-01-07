@@ -2,7 +2,7 @@ using Shapes.Core.Implementations;
 
 namespace Shapes.Tests.Circles
 {
-    // Tests ensures fitting the equation of a circle whith is
+    // Tests ensures fitting the equation of a circle:
     // (x - a)^2 + (y - b)^2 = r^2, where (a, b) are coordinates of circle center and r is the radius.
     public class CircleDoubleTests
     {
@@ -11,6 +11,7 @@ namespace Shapes.Tests.Circles
         [InlineData(double.NegativeInfinity)]
         [InlineData(-double.Pi)]
         [InlineData(double.NegativeZero)]
+        [InlineData(double.MaxValue)]
         [InlineData(double.PositiveInfinity)]
         public void TryCreateWithInvalidRadius(double radius)
         {
@@ -26,14 +27,6 @@ namespace Shapes.Tests.Circles
         public void Create(double radius)
         {
             Assert.Equal(double.Pi * radius * radius, Circle<double>.CreateWithRadius(radius).Area);
-        }
-
-        [Theory]
-        [InlineData(double.MaxValue)]
-        public void CreateWithInfiniteArea(double radius)
-        {
-            var circle = Circle<double>.CreateWithRadius(radius);
-            Assert.Equal(double.PositiveInfinity, circle.Area);
         }
     }
 }

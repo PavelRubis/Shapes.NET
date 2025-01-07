@@ -39,11 +39,29 @@ namespace Shapes.Core.Implementations
         public static Rectangle<T> CreateWithSides(T a, T b)
         {
             T[] sides = [a, b];
-            if (sides.All(side => side > T.Zero && T.IsRealNumber(side) && !T.IsPositiveInfinity(side)))
+            if (sides.Any(side => side <= T.Zero || !T.IsRealNumber(side)))
             {
-                return new Rectangle<T>(a, b);
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b), "Rectangle with sides " + a + ", " + b + " is impossible.");
             }
-            throw new ArgumentOutOfRangeException("The rectangle with sides " + a + ", " + b + " is impossible.");
+            if (!Rectangle<T>.IsTypeFitsRectangleWithSides(a, b))
+            {
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b), "Rectangle with sides " + a + ", " + b + " " + "can not be presented via " + typeof(T).FullName + " type.");
+            }
+            return new Rectangle<T>(a, b);
+        }
+
+        private static bool IsTypeFitsRectangleWithSides(T a, T b)
+        {
+            var area = T.Zero;
+            try
+            {
+                area = checked(a * b);
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+            return !T.IsPositiveInfinity(area);
         }
     }
 }

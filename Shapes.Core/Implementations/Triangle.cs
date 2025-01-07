@@ -77,16 +77,38 @@ namespace Shapes.Core.Implementations
         public static Triangle<T> CreateWithSides(T a, T b, T c)
         {
             T[] sides = [a, b, c];
-            if (sides.All(side => side > T.Zero && T.IsRealNumber(side) && !T.IsPositiveInfinity(side)) && Triangle<T>.SidesFitTriangleEquation(a, b, c))
+            if (sides.Any(side => side <= T.Zero || !T.IsRealNumber(side)) || !Triangle<T>.SidesFitTriangleEquation(a, b, c))
             {
-                return new Triangle<T>(a, b, c);
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b) + ", " + nameof(c), "Triangle with sides " + a + ", " + b + ", " + c + " is impossible.");
             }
-            throw new ArgumentOutOfRangeException("The triangle with sides " + a + ", " + b + ", " + c + " is impossible.");
+            if (!Triangle<T>.IsTypeFitsTriangleWithSides(a, b, c))
+            {
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b) + ", " + nameof(c), "Triangle with sides " + a + ", " + b + ", " + c + " can not be presented via " + typeof(T).FullName + " type.");
+            }
+            return new Triangle<T>(a, b, c);
         }
 
         private static bool SidesFitTriangleEquation(T a, T b, T c)
         {
             return a + b > c && a + c > b && b + c > a;
+        }
+
+        private static bool IsTypeFitsTriangleWithSides(T a, T b, T c)
+        {
+            var area = T.Zero;
+            try
+            {
+                checked
+                {
+                    var p = (a + b + c) / (T.One + T.One);
+                    area = T.Sqrt((p * (p - a) * (p - b) * (p - c)));
+                }
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+            return !T.IsPositiveInfinity(area);
         }
     }
 }

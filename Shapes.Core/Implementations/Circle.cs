@@ -35,11 +35,29 @@ namespace Shapes.Core.Implementations
 
         public static Circle<T> CreateWithRadius(T radius)
         {
-            if (T.IsPositive(radius) && T.IsRealNumber(radius) && !T.IsPositiveInfinity(radius))
+            if (!T.IsPositive(radius) || !T.IsRealNumber(radius))
             {
-                return new Circle<T>(radius);
+                throw new ArgumentOutOfRangeException(nameof(radius), "The circle with radius " + radius + " " + "is impossible.");
             }
-            throw new ArgumentOutOfRangeException("The circle with radius" + radius + " is impossible.");
+            if (!Circle<T>.IsTypeFitsCircleWithRadius(radius))
+            {
+                throw new ArgumentOutOfRangeException(nameof(radius), "The circle with radius " + radius + " " + "can not be presented via " + typeof(T).FullName + " type.");
+            }
+            return new Circle<T>(radius);
+        }
+
+        private static bool IsTypeFitsCircleWithRadius(T radius)
+        {
+            var area = T.Zero;
+            try
+            {
+               area = checked(T.Pi * radius * radius);
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+            return !T.IsPositiveInfinity(area);
         }
     }
 }
