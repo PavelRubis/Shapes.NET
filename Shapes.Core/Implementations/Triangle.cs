@@ -83,6 +83,11 @@ namespace Shapes.Core.Implementations
                         break;
                 }
 
+                if (_areaCalculated) // reducing implicit side effects)
+                {
+                    return _area == otherSide1 * otherSide2 / (T.One + T.One);
+                }
+
                 var res = maxSide * maxSide == (otherSide1 * otherSide1) + (otherSide2 * otherSide2);
                 return res;
             }
