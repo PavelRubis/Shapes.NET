@@ -8,17 +8,26 @@ using System.Threading.Tasks;
 
 namespace Shapes.Core.Implementations
 {
+    /// <summary>
+    /// Represents a rectangle with sides named "<c>A</c>" and "<c>B</c>". Values of sides and all other props constrained by type
+    /// <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of all rectangle's props. MUST implements <see cref="INumber{T}"/> interface.</typeparam>
     public class Rectangle<T> : IShape<T> where T : INumber<T>
     {
-        private T _a;
-        private T _b;
+        /// <summary>Gets the rectangle's side, named as "<c>A</c>".</summary>
+        public T A { get; private set; }
+
+        /// <summary>Gets the rectangle's side, named as "<c>B</c>".</summary>
+        public T B { get; private set; }
+
         private T _area;
         private bool _areaCalculated;
 
         private Rectangle(T a, T b)
         {
-            _a = a;
-            _b = b;
+            this.A = a;
+            this.B = b;
         }
 
         public T Area
@@ -30,12 +39,20 @@ namespace Shapes.Core.Implementations
                     return _area;
                 }
 
-                _area = _a * _b;
+                _area = this.A * this.B;
                 _areaCalculated = true;
                 return _area;
             }
         }
 
+        /// <summary>
+        /// Creates a rectangle with specified sides (<paramref name="a"/>, <paramref name="b"/>) of type
+        /// <typeparamref name="T"/>.
+        /// </summary>
+        /// <param name="a">The rectangle's side "<c>A</c>".</param>
+        /// <param name="b">The rectangle's side "<c>B</c>".</param>
+        /// <returns>A new instance of <see cref="Rectangle{T}"><c>Rectangle</c></see></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The rectangle can not be presented by type <typeparamref name="T" /> or impossible.</exception>
         public static Rectangle<T> CreateWithSides(T a, T b)
         {
             T[] sides = [a, b];
@@ -45,7 +62,7 @@ namespace Shapes.Core.Implementations
             }
             if (!Rectangle<T>.IsTypeFitsRectangleWithSides(a, b))
             {
-                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b), "Rectangle with sides " + a + ", " + b + " " + "can not be presented via " + typeof(T).FullName + " type.");
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b), "Rectangle with sides " + a + ", " + b + " " + "can not be presented by " + typeof(T).FullName + " type.");
             }
             return new Rectangle<T>(a, b);
         }

@@ -19,6 +19,7 @@ namespace Shapes.Tests.Triangles
         [InlineData(3d, 4d, -float.Pi)]
         [InlineData(3d, 4d, 0f)]
         [InlineData(3d, 4d, float.PositiveInfinity)]
+        [InlineData(float.MaxValue - 2, float.MaxValue - 1, float.MaxValue)]
         public void TryCreateWithInvalidSides(float a, float b, float c)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>

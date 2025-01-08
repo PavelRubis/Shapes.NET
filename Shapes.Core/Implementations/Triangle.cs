@@ -8,20 +8,31 @@ using System.Threading.Tasks;
 
 namespace Shapes.Core.Implementations
 {
-    public class Triangle<T> : IShape<T> where T : INumber<T>, IRootFunctions<T>
+    /// <summary>
+    /// Represents a triangle with sides named "<c>A</c>", "<c>B</c>" and "<c>C</c>". Values of sides and all other props constrained by type
+    /// <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of all triangle's props. MUST implements <see cref="INumber{T}"/> and <see cref="IRootFunctions{T}"/> interfaces.</typeparam>
+    public class Triangle<T> : IShape<T> where T : IFloatingPoint<T>, IRootFunctions<T>
     {
-        private T _a;
-        private T _b;
-        private T _c;
+        /// <summary>Gets the triangle's side, named as "<c>A</c>".</summary>
+        public T A { get; private set; }
+
+        /// <summary>Gets the triangle's side, named as "<c>B</c>".</summary>
+        public T B { get; private set; }
+
+        /// <summary>Gets the triangle's side, named as "<c>C</c>".</summary>
+        public T C { get; private set; }
+
         private T _area;
         private bool? _isRightAngled;
         private bool _areaCalculated;
 
         private Triangle(T a, T b, T c)
         {
-            _a = a;
-            _b = b;
-            _c = c;
+            this.A = a;
+            B = b;
+            C = c;
         }
 
         public T Area
@@ -33,13 +44,16 @@ namespace Shapes.Core.Implementations
                     return _area;
                 }
 
-                var p = (_a + _b + _c) / (T.One + T.One);
-                _area = T.Sqrt((p * (p - _a) * (p - _b) * (p - _c)));
+                var p = (this.A + B + C) / (T.One + T.One);
+                _area = T.Sqrt((p * (p - this.A) * (p - B) * (p - C)));
                 _areaCalculated = true;
                 return _area;
             }
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if one of the triangle's angles is exactly 90 degrees. <c>false</c> otherwise.
+        /// </summary>
         public bool IsRightAngled
         {
             get
@@ -48,24 +62,24 @@ namespace Shapes.Core.Implementations
                 {
                     return _isRightAngled.Value;
                 }
-                T[] sides = [_a, _b, _c];
+                T[] sides = [this.A, B, C];
                 var maxSide = sides.Max();
                 var otherSide1 = default(T);
                 var otherSide2 = default(T);
 
                 switch (true)
                 {
-                    case true when maxSide == _a:
-                        otherSide1 = _b;
-                        otherSide2 = _c;
+                    case true when maxSide == this.A:
+                        otherSide1 = B;
+                        otherSide2 = C;
                         break;
-                    case true when maxSide == _b:
-                        otherSide1 = _a;
-                        otherSide2 = _c;
+                    case true when maxSide == B:
+                        otherSide1 = this.A;
+                        otherSide2 = C;
                         break;
-                    case true when maxSide == _c:
-                        otherSide1 = _a;
-                        otherSide2 = _b;
+                    case true when maxSide == C:
+                        otherSide1 = this.A;
+                        otherSide2 = B;
                         break;
                 }
 
@@ -74,6 +88,15 @@ namespace Shapes.Core.Implementations
             }
         }
 
+        /// <summary>
+        /// Creates a triangle with specified sides (<paramref name="a"/>, <paramref name="b"/>, <paramref name="c"/>) of type
+        /// <typeparamref name="T"/>.
+        /// </summary>
+        /// <param name="a">The triangle's side "<c>A</c>".</param>
+        /// <param name="b">The triangle's side "<c>B</c>".</param>
+        /// <param name="c">The triangle's side "<c>C</c>".</param>
+        /// <returns>A new instance of <see cref="Triangle{T}"><c>Triangle</c></see></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The triangle can not be presented by type <typeparamref name="T" /> or impossible.</exception>
         public static Triangle<T> CreateWithSides(T a, T b, T c)
         {
             T[] sides = [a, b, c];
@@ -83,7 +106,7 @@ namespace Shapes.Core.Implementations
             }
             if (!Triangle<T>.IsTypeFitsTriangleWithSides(a, b, c))
             {
-                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b) + ", " + nameof(c), "Triangle with sides " + a + ", " + b + ", " + c + " can not be presented via " + typeof(T).FullName + " type.");
+                throw new ArgumentOutOfRangeException(nameof(a) + ", " + nameof(b) + ", " + nameof(c), "Triangle with sides " + a + ", " + b + ", " + c + " can not be presented by " + typeof(T).FullName + " type.");
             }
             return new Triangle<T>(a, b, c);
         }

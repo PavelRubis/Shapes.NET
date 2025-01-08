@@ -19,6 +19,7 @@ namespace Shapes.Tests.Triangles
         [InlineData(3d, 4d, -double.Pi)]
         [InlineData(3d, 4d, 0d)]
         [InlineData(3d, 4d, double.PositiveInfinity)]
+        [InlineData(double.MaxValue - 2, double.MaxValue - 1, double.MaxValue)]
         public void TryCreateWithInvalidSides(double a, double b, double c)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
@@ -41,8 +42,8 @@ namespace Shapes.Tests.Triangles
         public void CreateNotRightAngled(double a, double b, double c)
         {
             var triangle = Triangle<double>.CreateWithSides(a, b, c);
-            Assert.Equal(30d * double.Sqrt(2d), triangle.Area);
             Assert.Equal(false, triangle.IsRightAngled);
+            Assert.Equal(30d * double.Sqrt(2d), triangle.Area);
         }
     }
 }
